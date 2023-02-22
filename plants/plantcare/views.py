@@ -4,21 +4,21 @@ from rest_framework.decorators import api_view
 from .models import Plant
 from .serializers import PlantSerializer
 import requests
-import apikey
+import json
+from . import apikey
 
 @api_view(['POST'])
 def requestData(request):
     token = apikey.token
-    print('here')
-    print(request.method)
-    r = requests.get(f'https://trefle.io/api/v1/plants?token={token}')
-    r.json()
-    print(r.json())
-    return Response('OK')
-        
+    request_data = json.loads(request.data['json'])
+    query = request_data['data']
+    r = requests.get(f'https://perenual.com/api/species-list?key={token}&q={query}')
+    return Response(r.json())
+    
     
 @api_view(['GET','POST'])
 def plants(request):
+    print('internal all')
     # GET request -> get all plants
     if request.method == 'GET':
         plants = Plant.objects.all()
@@ -29,6 +29,7 @@ def plants(request):
 
 @api_view(['GET','PUT','DELETE'])
 def plant(request):
+    print('internal one')
     # GET request -> get single plant
     if request.method == 'POST':
         return Response('GET ONE')
