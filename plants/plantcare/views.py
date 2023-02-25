@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Plant
-from .serializers import PlantSerializer
+from .models import Plant, Room
+from .serializers import PlantSerializer, RoomSerializer
 import requests
 import json
 from . import apikey
@@ -36,3 +36,10 @@ def plant(request):
     # PUT request -> update single plant
     # DELETE request -> delete single plant
     pass
+
+@api_view(['GET'])
+def rooms(request):
+    rooms = Room.objects.all()
+    if request.method == 'GET':
+        serializer = RoomSerializer(rooms, many=True)
+        return Response(serializer.data)

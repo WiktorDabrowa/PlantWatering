@@ -44,11 +44,17 @@ export default function Search() {
             
         }
     }
+    const items = filtered_plants.map(item => {
+        return (
+            <div>{item.common_name}</div>
+        )
+    })
 
     return (
-        <div>
+        <div className="search_container">
             SEARCH BAR
-            <input onKeyUp={search} placeholder='Look for your plant...'></input>    
+            <input className='search_input' onKeyUp={search} placeholder='Look for your plant...'></input>
+            {items}    
         </div>
     )
 }
