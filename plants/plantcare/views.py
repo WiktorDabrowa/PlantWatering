@@ -43,3 +43,10 @@ def rooms(request):
     if request.method == 'GET':
         serializer = RoomSerializer(rooms, many=True)
         return Response(serializer.data)
+
+@api_view(['PUT'])
+def water(request, id):
+    plant = Plant.objects.get(id=id)
+    plant.save()
+    serializer = PlantSerializer(plant, many=False)
+    return Response(serializer.data)
