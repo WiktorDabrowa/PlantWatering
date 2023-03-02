@@ -1,11 +1,13 @@
 import React from "react"
 
-export default function Search() {
+export default function Search({addPlant}) {
     // States: 
     let [plants,setPlants] = React.useState([])
     let [filtered_plants, setFilteredPlants] = React.useState([])
     console.log(filtered_plants)
-
+    function click() {
+        console.log('click')
+    }
     function search(event){
         // Starts search if query is longer than 3 characters
         if (event.target.value.length < 3) {
@@ -46,7 +48,7 @@ export default function Search() {
     }
     const items = filtered_plants.map(item => {
         return (
-            <div className="plant_autofill">
+            <div key={item.id} onClick={click} className="plant_autofill">
                 <img className='plant_autofill_photo' src={item.default_image.thumbnail} />
                 <div className='plant_autofill_data'>
                     <div classname='common_name'>Common name : {item.common_name}</div>
@@ -65,6 +67,7 @@ export default function Search() {
             <div className='search_autofill'>
                 {items}
             </div>    
+            
         </div>
     )
 }

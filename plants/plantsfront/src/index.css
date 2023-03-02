@@ -18,21 +18,39 @@ body {
   height:100%;
   background-color: white;
   border:none;
-  color:pink;
+  color:hotpink;
   transition:1s;
   width:10rem;
-  position:relative
+  position:relative;
+  border-radius:1rem;
+  padding-left:1rem
+
 }
 .search_input:focus{
   border:none;
   outline:none;
-  width:50%
+  width:20rem;
 }
+
 .search_autofill{
+  display:none;
   position:absolute;
-  width:50%;
   z-index:2;
+  margin-top:5px;
   background-color: aliceblue;
+  max-height: 400px;
+  overflow-y:auto;
+  border-radius:1rem;
+  border:1px solid black
+}
+.search_autofill:focus-within{
+  display:block
+}
+.search_autofill::-webkit-scrollbar{
+  display:none
+}
+.search_input:focus~.search_autofill{
+  display:block
 }
 .plant_autofill{
   padding:0.2rem;
@@ -44,6 +62,7 @@ body {
 }
 .plant_autofill:hover{
   background-color: pink;
+  cursor:pointer
 }
 .plant_autofill_photo{
   height:8rem;
@@ -57,10 +76,13 @@ body {
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
 }
 /* Rooms */
+.rooms{
+  padding-top:1rem
+}
 .room_container{
   margin: 0 1rem 0 1rem;
   position:relative;
-  z-index: 1
+  z-index: 1;
 }
 .room_container > h2 {
   background-color: rgb(253, 141, 160);
@@ -68,6 +90,8 @@ body {
   padding-left:1rem;
   text-justify: center;
   margin:0;
+  transition:1s;
+  border-radius:1rem 1rem 0 0
 }
 .room_container>h2:hover{
   cursor:pointer
@@ -98,7 +122,17 @@ body {
   transition: 1s;
   padding:0;
   flex-wrap: wrap;
-  height:50rem
+  height:50rem;
+  border-radius: 0 0 1rem 1rem;
+}
+.room_container.not_shown>h2{
+  border-radius:0
+}
+.room_container:first-child.not_shown>h2{
+  border-radius: 1rem 1rem 0 0 !important;
+}
+.room_container:last-child.not_shown>h2{
+  border-radius:0 0 1rem 1rem !important
 }
 .room_container.not_shown>.room_plants{
   height:0
@@ -177,4 +211,11 @@ body {
 .water_btn:hover{
   color: seagreen;
   cursor:pointer
+}
+
+/* AddPlant */
+.addPlant_container{
+  position:absolute;
+  top:50%;
+  right:50%
 }
