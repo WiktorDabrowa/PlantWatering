@@ -8,5 +8,4 @@ Simple web app to track watering of house plants
 - React frontend
 - learn more about date objects in python and JS
 - Backend - send e-mail notifications
-- Frontend Room -> drag and drop function?
 - storing images in db

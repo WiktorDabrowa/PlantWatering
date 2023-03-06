@@ -1,13 +1,11 @@
 import React from "react"
 
-export default function Search({addPlant}) {
-    // States: 
+export default function Search({sidePanel, searching, setSearch}) {
+    // States:
     let [plants,setPlants] = React.useState([])
     let [filtered_plants, setFilteredPlants] = React.useState([])
-    console.log(filtered_plants)
-    function click() {
-        console.log('click')
-    }
+
+    // Search outside database:
     function search(event){
         // Starts search if query is longer than 3 characters
         if (event.target.value.length < 3) {
@@ -46,9 +44,10 @@ export default function Search({addPlant}) {
             
         }
     }
+    // Create elements in popup window
     const items = filtered_plants.map(item => {
         return (
-            <div key={item.id} onClick={click} className="plant_autofill">
+            <div key={item.id} onClick={(e) => sidePanel(e, item)} className="plant_autofill">
                 <img className='plant_autofill_photo' src={item.default_image.thumbnail} />
                 <div className='plant_autofill_data'>
                     <div classname='common_name'>Common name : {item.common_name}</div>
@@ -63,10 +62,13 @@ export default function Search({addPlant}) {
 
     return (
         <div className="search_container">
-            <input className='search_input' onKeyUp={search} placeholder='Look for your plant...'></input>
-            <div className='search_autofill'>
-                {items}
-            </div>    
+            <input onFocus={setSearch} className='search_input' onKeyUp={search} placeholder='Look for your plant...'></input>
+            { searching && 
+                <div className='search_autofill'>
+                    <div onClick={sidePanel} className='plant_autofill new_plant'>BLANK</div>
+                    {items}
+                </div>    
+            }
             
         </div>
     )

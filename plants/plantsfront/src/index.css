@@ -1,9 +1,16 @@
 
 body {
-  background-color: pink;
   padding:0;
   margin:0;
-  overflow-y:scroll
+  overflow-y:scroll;
+  height:100vh
+}
+#root{
+  height:100%
+}
+.main_container{
+  background-color: pink;
+  height:100%
 }
 /* Search bar */
 .search_container{
@@ -33,25 +40,22 @@ body {
 }
 
 .search_autofill{
-  display:none;
   position:absolute;
   z-index:2;
   margin-top:5px;
   background-color: aliceblue;
   max-height: 400px;
   overflow-y:auto;
+  width:35rem;
   border-radius:1rem;
-  border:1px solid black
+  border:1px solid black;
+  box-shadow:0 0 5px black
 }
-.search_autofill:focus-within{
-  display:block
-}
+
 .search_autofill::-webkit-scrollbar{
   display:none
 }
-.search_input:focus~.search_autofill{
-  display:block
-}
+
 .plant_autofill{
   padding:0.2rem;
   padding-left:1rem;
@@ -59,6 +63,9 @@ body {
   flex-direction: row;
   overflow-y: auto;
   height:9rem
+}
+.plant_autofill  * {
+  pointer-events: none;
 }
 .plant_autofill:hover{
   background-color: pink;
@@ -75,9 +82,14 @@ body {
   display:grid;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
 }
+/* Content Container */
+.content_container{
+  display:flex;
+}
 /* Rooms */
 .rooms{
-  padding-top:1rem
+  padding-top:1rem;
+  flex:4
 }
 .room_container{
   margin: 0 1rem 0 1rem;
@@ -214,8 +226,21 @@ body {
 }
 
 /* AddPlant */
-.addPlant_container{
-  position:absolute;
-  top:50%;
-  right:50%
+.side_panel{
+  position:fixed;
+  overflow:hidden;
+  padding:1rem;
+  top:10%;
+  right:-30%;
+  height:100px;
+  flex-basis:0;
+  background-color: teal;
+  transition:1s;
+  white-space: nowrap;
+  z-index: 3;
+  width:25%;
+  border-radius: 1rem
+}
+.side_panel.show{
+  right:2.5%
 }
