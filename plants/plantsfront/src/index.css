@@ -58,24 +58,31 @@ body {
 
 .plant_autofill{
   padding:0.2rem;
-  padding-left:1rem;
+  padding-left:1.5rem;
   display:flex;
   flex-direction: row;
   overflow-y: auto;
-  height:9rem
+  height:4rem;
+  overflow:visible
 }
-.plant_autofill  * {
+.plant_autofill  *:not(.plant_autofill_photo) {
   pointer-events: none;
 }
 .plant_autofill:hover{
   background-color: pink;
-  cursor:pointer
+  cursor:pointer;
+  z-index:3
 }
 .plant_autofill_photo{
-  height:8rem;
-  width:8rem;
+  height:4rem;
+  width:4rem;
   object-fit: contain;
-  border:1px solid pink
+  border:1px solid pink;
+  transition:1s;
+  alt:'no photo'
+}
+.plant_autofill_photo:hover{
+  transform:scale(2)
 }
 .plant_autofill_data{
   margin-left:1rem;
@@ -232,15 +239,48 @@ body {
   padding:1rem;
   top:10%;
   right:-30%;
-  height:100px;
+  height:80vh;
   flex-basis:0;
-  background-color: teal;
+  background-color: rgba(46, 139, 86, 0.711);
   transition:1s;
   white-space: nowrap;
   z-index: 3;
   width:25%;
-  border-radius: 1rem
+  max-width: 300px;
+  border-radius: 1rem;
+  overflow-y:auto
+}
+.side_panel::-webkit-scrollbar{
+  display:none
 }
 .side_panel.show{
-  right:2.5%
+  right:2.5%;
+  white-space:normal;
+}
+.side_panel_closebtn{
+  position: absolute;
+  border:none;
+  background-color: transparent;
+  padding:0;
+  right:0;
+  color:white;
+  mix-blend-mode: difference;
+}
+.side_panel_form{
+  display:flex;
+  flex-direction: column;
+}
+.side_panel_current_plant{
+  display:flex;
+  flex-direction: column;
+  gap:5px;
+  font-size: 1rem;
+}
+.current_plant_photo{
+  max-width:300px;
+  aspect-ratio: 1/1;
+  border-radius: 1rem;
+}
+.current_plant_data_span{
+  font-weight: bold;
 }

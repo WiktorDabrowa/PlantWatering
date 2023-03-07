@@ -13,6 +13,7 @@ def requestData(request):
     request_data = json.loads(request.data['json'])
     query = request_data['data']
     r = requests.get(f'https://perenual.com/api/species-list?key={token}&q={query}')
+    print(r)
     return Response(r.json())
     
     

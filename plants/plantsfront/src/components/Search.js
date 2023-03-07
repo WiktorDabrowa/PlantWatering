@@ -30,31 +30,43 @@ export default function Search({sidePanel, searching, setSearch}) {
             let query = event.target.value.toLowerCase()
             const contains_query = (element) => element.toLowerCase().includes(query)
             setFilteredPlants(plants.filter((obj) => {
+                let response = false
                 if (obj.common_name.toLowerCase().includes(query)) {
-                    return true
+                    response = true
                 } else if (obj.scientific_name.some(contains_query)) {
-                    return true
+                    response = true
                 } else if (obj.other_name !== null) {
                     if (obj.other_name.some(contains_query)) {
-                        return true
+                        response = true
                     }
                 }
+                return response
             })
             ) 
             
         }
     }
+    
     // Create elements in popup window
     const items = filtered_plants.map(item => {
+        function image() {
+            // Kazdy zawiera default_image
+            let src = ''
+            if (item.default_image === null) {
+                src = '/outline_plant.webp'
+            } else if (!Object.keys(item.default_image).includes('thumbnail')) {
+                src = '/outline_plant.webp'
+            } else  {
+                src = item.default_image.thumbnail
+            }
+            return src
+            
+        }
         return (
             <div key={item.id} onClick={(e) => sidePanel(e, item)} className="plant_autofill">
-                <img className='plant_autofill_photo' src={item.default_image.thumbnail} />
+                <img className='plant_autofill_photo' src={image()}/>
                 <div className='plant_autofill_data'>
-                    <div classname='common_name'>Common name : {item.common_name}</div>
-                    <div classname='scientific_name'>Scientific name : {item.scientific_name}</div>
-                    <div classname='other_name'>Other name : {item.other_name || 'Unknown'}</div>
-                    <div classname='watering'>Watering : {item.watering || 'Unknown'}</div>
-                    <div classname='sunlight'>Sunlight : {item.sunlight || 'Unknown'}</div>
+                    <div className='common_name'>Common name : {item.common_name}</div>
                 </div>
             </div>
         )
