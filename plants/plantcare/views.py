@@ -26,7 +26,10 @@ def plants(request):
         serializer = PlantSerializer(plants, many=True)
         return Response(serializer.data)
     # POST request -> add plant
-    pass
+    elif request.method == 'POST':
+        item = json.loads(request.body)
+        print(item['name'])
+        return Response('data sent')
 
 @api_view(['GET','PUT','DELETE'])
 def plant(request):

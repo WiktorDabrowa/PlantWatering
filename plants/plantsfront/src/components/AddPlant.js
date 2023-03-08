@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function AddPlant({currentPlant, showPanel}) {
+    const [rooms, setRooms] = React.useState([])
     const [form,setForm] = React.useState({
         name:'',
         localization:'',
@@ -8,6 +9,11 @@ export default function AddPlant({currentPlant, showPanel}) {
         sunlight:'',
         photo:''
     })
+    React.useEffect(() => {
+        fetch('http://127.0.0.1:8000/rooms')
+        .then((response) => response.json())
+        .then((data) => setRooms(data))
+    },[])
     function display(item){
         let str = ''
         if (item === null || item === undefined) {
@@ -21,10 +27,36 @@ export default function AddPlant({currentPlant, showPanel}) {
         }
         return <span className='current_plant_data_span'>{str}</span>
     }
-    function send(plant) {
-
+    function send(e) {
+        e.preventDefault()
+        fetch('http://127.0.0.1:8000/plants', {
+            method:'POST',
+            body: JSON.stringify(form)
+        })
+        .then((response) => response.json())
+        .then ((data) => console.log(data))
     }
-
+    function handleChange(e) {
+         setForm(prevForm => {
+             const {name, value} = e.target
+             return {
+                 ...prevForm,
+                 [name]:value
+             }
+         })
+    }
+    function populateForm() {
+        setForm({
+            name:`${currentPlant.common_name}`,
+            localization:'',
+            watering:`${currentPlant.watering}`,
+            sunlight:`${currentPlant.sunlight}`,
+            photo:''
+        })
+    }
+    const room_options = rooms.map(room => {
+        return <option key={room.id} value={room.id}>{room.name}</option>
+    })
     return (
         <div className='side_panel'>
             <button className='side_panel_closebtn' onClick = {showPanel}>
@@ -40,12 +72,30 @@ export default function AddPlant({currentPlant, showPanel}) {
                 <div className='current_plant_data'>Other names : {display(currentPlant.other_name)}</div>
                 <div className='current_plant_data'>Preffered watering : {display(currentPlant.watering)}</div>
                 <div className='current_plant_data'>Preffered sunlight : {display(currentPlant.sunlight)}</div>
+                <button onClick={populateForm}>Use this data</button>
             </div>}
-            <form className='side_panel_form'>
-                <input className='form_input' name='name'></input>
-                <input className='form_input' name='localization'></input>
-                <input className='form_input' name='watering'></input>
-                <input className='form_input' name='sunlight'></input>
+            {(Object.keys(currentPlant).length === 0) && 
+                <h2>New Plant</h2> 
+            }
+            <form onSubmit={send} className='side_panel_form'>
+                <input placeholder='Name of plant'onChange={handleChange} value={form.name} className='form_input' autoComplete='off' name='name'></input>
+                <select onChange={handleChange} value={form.localization} className='form_input' autoComplete='off' name='localization'>
+                    {room_options}
+                </select>
+                <select placeholder='watering'onChange={handleChange} value={form.watering} className='form_input' autoComplete='off' name='watering'>
+                    <option value='none'>None</option>
+                    <option value='minimum'>Minimum</option>
+                    <option value='average'>Average</option>
+                    <option value='frequent'>Frequent</option>
+                </select>
+                <select name='sunlight' onChange={handleChange} value={form.sunlight} className="form_sunlight_choiceoptions">
+                    <option value='full_shade'>Full Shade</option>
+                    <option value='part_shade'>Part shade</option>
+                    <option value='sun-part_shade'>Indirect sunlight</option>
+                    <option value='full_sun'>Full sunlight</option>
+                </select>
+                <input type='file' onChange={handleChange} value={form.photo} className='form_input' autoComplete='off' name='photo'></input>
+                <button className='form_submit'>Send</button>
             </form>
         </div>
     )

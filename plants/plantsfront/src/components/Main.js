@@ -22,6 +22,7 @@ export default function Main() {
         const side_panel = document.querySelector('.side_panel')
         if (plant === undefined) {
             console.log('New Plant')
+            setCurrentPlant({})
         } else if (currentPlant !== plant){
             setCurrentPlant(plant)
         }

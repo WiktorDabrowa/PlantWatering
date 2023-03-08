@@ -43,10 +43,11 @@ body {
   position:absolute;
   z-index:2;
   margin-top:5px;
-  background-color: aliceblue;
+  background-color: rgba(240, 248, 255);
   max-height: 400px;
+  color:pink;
   overflow-y:auto;
-  width:35rem;
+  width:25rem;
   border-radius:1rem;
   border:1px solid black;
   box-shadow:0 0 5px black
@@ -62,8 +63,10 @@ body {
   display:flex;
   flex-direction: row;
   overflow-y: auto;
-  height:4rem;
-  overflow:visible
+  height:2rem;
+  overflow:visible;
+  align-items: center;
+  transition:0.5s
 }
 .plant_autofill  *:not(.plant_autofill_photo) {
   pointer-events: none;
@@ -71,23 +74,33 @@ body {
 .plant_autofill:hover{
   background-color: pink;
   cursor:pointer;
+  color:hotpink;
   z-index:3
 }
+.new_plant_svg{
+  width:2rem
+}
+.new_plant_text{
+  margin-left:1rem;
+  font-size:1rem
+}
+.new_plant{
+  color:rgba(255, 105, 180, 0.527);
+}
+.new_plant:hover{
+  color:hotpink
+}
 .plant_autofill_photo{
-  height:4rem;
-  width:4rem;
+  height:2rem;
+  width:2rem;
   object-fit: contain;
   border:1px solid pink;
   transition:1s;
   alt:'no photo'
 }
-.plant_autofill_photo:hover{
-  transform:scale(2)
-}
 .plant_autofill_data{
   margin-left:1rem;
-  display:grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  font-size:1rem
 }
 /* Content Container */
 .content_container{
@@ -96,7 +109,8 @@ body {
 /* Rooms */
 .rooms{
   padding-top:1rem;
-  flex:4
+  flex:4;
+  background-color: pink;
 }
 .room_container{
   margin: 0 1rem 0 1rem;
@@ -169,6 +183,7 @@ body {
 /* Plants */
 .plant{
   width:20rem;
+  height:23rem;
   aspect-ratio: 1/1 !important;
   border:1px solid red;
   transition:0.8s;
@@ -237,6 +252,7 @@ body {
   position:fixed;
   overflow:hidden;
   padding:1rem;
+  padding-top:2rem;
   top:10%;
   right:-30%;
   height:80vh;
@@ -263,12 +279,27 @@ body {
   background-color: transparent;
   padding:0;
   right:0;
+  top:0;
   color:white;
   mix-blend-mode: difference;
 }
 .side_panel_form{
   display:flex;
   flex-direction: column;
+  gap:0.5rem
+}
+.side_panel_form > * {
+  height:2rem;
+  border-radius: 1rem;
+  padding-left:1rem;
+  border:none
+}
+.side_panel_form>*:focus{
+  outline:none;
+  border:none
+}
+.side_panel_form_photo_div{
+  display:flex
 }
 .side_panel_current_plant{
   display:flex;
