@@ -19,7 +19,7 @@ def requestData(request):
     
 @api_view(['GET','POST'])
 def plants(request):
-    print('internal all')
+    print('Plants:')
     # GET request -> get all plants
     if request.method == 'GET':
         plants = Plant.objects.all()
@@ -27,18 +27,37 @@ def plants(request):
         return Response(serializer.data)
     # POST request -> add plant
     elif request.method == 'POST':
-        item = json.loads(request.body)
-        print(item['name'])
+        room = Room.objects.get(id = request.data['localization'])
+        watering = {
+            'minumum':14,
+            'frequent':7,
+            'average':12
+        }
+        print(request.data)
+        print(request.data['photo'])
+        Plant.objects.create(
+            name=request.data['name'],
+            photo=request.data['photo'],
+            localization=room,
+            sunlight=request.data['sunlight'],
+            water_how_often=watering(request.data['watering']),
+        )
         return Response('data sent')
 
 @api_view(['GET','PUT','DELETE'])
-def plant(request):
+def plant(request,id):
     print('internal one')
     # GET request -> get single plant
     if request.method == 'POST':
         return Response('GET ONE')
     # PUT request -> update single plant
+    if request.method == 'PUT':
+        return Response(f'{item} edited')
     # DELETE request -> delete single plant
+    if request.method == 'DELETE':
+        item = Plant.objects.get(id=id)
+        item.delete()
+        return Response(f'{item} deleted')
     pass
 
 @api_view(['GET'])

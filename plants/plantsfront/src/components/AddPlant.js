@@ -7,13 +7,17 @@ export default function AddPlant({currentPlant, showPanel}) {
         localization:'',
         watering:'',
         sunlight:'',
-        photo:''
+        photo : null
     })
+
+    // Fetch room data from the server  
     React.useEffect(() => {
         fetch('http://127.0.0.1:8000/rooms')
         .then((response) => response.json())
         .then((data) => setRooms(data))
     },[])
+
+    // Displays plant data
     function display(item){
         let str = ''
         if (item === null || item === undefined) {
@@ -27,24 +31,38 @@ export default function AddPlant({currentPlant, showPanel}) {
         }
         return <span className='current_plant_data_span'>{str}</span>
     }
+
+    // Sends form data to the server to create
+    // new instance of Plant
     function send(e) {
+        const uploadData = new FormData()
+        uploadData.append('name', form.name)
+        uploadData.append('localization', form.localization)
+        uploadData.append('watering', form.watering)
+        uploadData.append('sunlight', form.sunlight)
+        uploadData.append('photo', form.photo, form.photo.name)
         e.preventDefault()
         fetch('http://127.0.0.1:8000/plants', {
             method:'POST',
-            body: JSON.stringify(form)
+            body: uploadData
         })
         .then((response) => response.json())
         .then ((data) => console.log(data))
     }
+
+    // Handle change of form
     function handleChange(e) {
          setForm(prevForm => {
              const {name, value} = e.target
              return {
                  ...prevForm,
-                 [name]:value
+                 [name]: e.target.type === 'file' ? e.target.files[0] : e.target.value 
+                 
              }
          })
     }
+
+    // Populate form with data from external api
     function populateForm() {
         setForm({
             name:`${currentPlant.common_name}`,
@@ -57,6 +75,7 @@ export default function AddPlant({currentPlant, showPanel}) {
     const room_options = rooms.map(room => {
         return <option key={room.id} value={room.id}>{room.name}</option>
     })
+
     return (
         <div className='side_panel'>
             <button className='side_panel_closebtn' onClick = {showPanel}>
@@ -94,7 +113,7 @@ export default function AddPlant({currentPlant, showPanel}) {
                     <option value='sun-part_shade'>Indirect sunlight</option>
                     <option value='full_sun'>Full sunlight</option>
                 </select>
-                <input type='file' onChange={handleChange} value={form.photo} className='form_input' autoComplete='off' name='photo'></input>
+                <input type='file' onChange={handleChange} className='form_input' autoComplete='off' name='photo'></input>
                 <button className='form_submit'>Send</button>
             </form>
         </div>

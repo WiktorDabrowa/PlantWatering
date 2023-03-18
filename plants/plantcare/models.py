@@ -8,9 +8,10 @@ class Room(models.Model):
         
 class Plant(models.Model):
     sunlight_choices = [
-        ('Full','Full'),
-        ('Semi', 'Semi'),
-        ('Dark','Dark')
+        ('full_shade','Full shade'),
+        ('part_shade', 'Part shade'),
+        ('sun_part_shade','Indirect sunlight'),
+        ('full_sun','Full sun')
     ]
     name = models.CharField(max_length=30, unique=True)
     localization = models.ForeignKey(Room, on_delete=models.PROTECT)
