@@ -17,15 +17,13 @@ export default function AddPlant({currentPlant, showPanel}) {
         .then((data) => setRooms(data))
     },[])
 
-    // Displays plant data
+    // Displays plant data in correct formatting
     function display(item){
         let str = ''
         if (item === null || item === undefined) {
             return str = 'Unknown'
-        }else if (typeof(item) === 'string') {
+        } else if (typeof(item) === 'string') {
             str = item.slice(0,1).toUpperCase() + item.slice(1)
-        } else if (typeof(item) === 'array') {
-            str = item.join('/')
         } else if (typeof(item) === 'object') {
             str = Object.values(item).join(' | ')
         }
@@ -40,8 +38,11 @@ export default function AddPlant({currentPlant, showPanel}) {
         uploadData.append('localization', form.localization)
         uploadData.append('watering', form.watering)
         uploadData.append('sunlight', form.sunlight)
-        uploadData.append('photo', form.photo, form.photo.name)
-        e.preventDefault()
+        if (typeof form.photo === 'string') {
+            uploadData.append('photo', form.photo)
+        } else {
+            uploadData.append('photo', form.photo, form.photo.name)
+        }
         fetch('http://127.0.0.1:8000/plants', {
             method:'POST',
             body: uploadData
@@ -53,10 +54,10 @@ export default function AddPlant({currentPlant, showPanel}) {
     // Handle change of form
     function handleChange(e) {
          setForm(prevForm => {
-             const {name, value} = e.target
+             const {name, value,files} = e.target
              return {
                  ...prevForm,
-                 [name]: e.target.type === 'file' ? e.target.files[0] : e.target.value 
+                 [name]: e.target.type === 'file' ? files[0] : value 
                  
              }
          })
@@ -64,12 +65,13 @@ export default function AddPlant({currentPlant, showPanel}) {
 
     // Populate form with data from external api
     function populateForm() {
+        const photo_url = currentPlant.default_image.original_url
         setForm({
             name:`${currentPlant.common_name}`,
             localization:'',
             watering:`${currentPlant.watering}`,
             sunlight:`${currentPlant.sunlight}`,
-            photo:''
+            photo:photo_url !== null && photo_url.lenght !== 0 ? photo_url : ''
         })
     }
     const room_options = rooms.map(room => {
@@ -85,7 +87,7 @@ export default function AddPlant({currentPlant, showPanel}) {
             </button>
             { (Object.keys(currentPlant).length !== 0) &&
             <div className='side_panel_current_plant'>
-                <img className='current_plant_photo' src={currentPlant.default_image.medium_url}/>
+                <img alt='...'className='current_plant_photo' src={currentPlant.default_image.medium_url}/>
                 <div className='current_plant_data'>Common Name : {display(currentPlant.common_name)}</div>
                 <div className='current_plant_data'>Scientific Name : {display(currentPlant.scientific_name)}</div>
                 <div className='current_plant_data'>Other names : {display(currentPlant.other_name)}</div>
@@ -99,6 +101,7 @@ export default function AddPlant({currentPlant, showPanel}) {
             <form onSubmit={send} className='side_panel_form'>
                 <input placeholder='Name of plant'onChange={handleChange} value={form.name} className='form_input' autoComplete='off' name='name'></input>
                 <select onChange={handleChange} value={form.localization} className='form_input' autoComplete='off' name='localization'>
+                    <option value='' disabled selected hidden>Choose a room...</option> 
                     {room_options}
                 </select>
                 <select placeholder='watering'onChange={handleChange} value={form.watering} className='form_input' autoComplete='off' name='watering'>

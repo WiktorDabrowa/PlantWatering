@@ -1,21 +1,22 @@
 import React from "react";
 
-export default function Plant({plant}) {
-    let [seed,setSeed] = React.useState(true)
+export default function Plant({plant,reload}) {
     function water() {
         fetch(`http://127.0.0.1:8000/water/${plant.id}`,{
             method: 'PUT'
         })
         .then((response) => response.json())
-        .then(() => setSeed(!seed))
+        .then(() => reload())
     }
     function deleteItem() {
         fetch(`http://127.0.0.1:8000/plant/${plant.id}`, {
             method:'DELETE'
         })
         .then((response) => response.json())
-        .then((data) => console.log(data))
-        setSeed(!seed)
+        .then((data) => {
+            console.log(data)
+            reload()
+        })
     }
 
     return (
@@ -54,7 +55,7 @@ export default function Plant({plant}) {
                     </svg>
                 </button>
             </div>
-            <img className='plant_photo' src={'http://127.0.0.1:8000' + plant.photo}/>
+            <img alt='Not found...' className='plant_photo' src={'http://127.0.0.1:8000' + plant.photo}/>
         </div>
     )
 }

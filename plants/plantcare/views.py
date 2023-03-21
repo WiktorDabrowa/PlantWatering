@@ -6,6 +6,9 @@ from .serializers import PlantSerializer, RoomSerializer
 import requests
 import json
 from . import apikey
+import io
+from django.core.files.images import ImageFile
+
 
 @api_view(['POST'])
 def requestData(request):
@@ -29,18 +32,21 @@ def plants(request):
     elif request.method == 'POST':
         room = Room.objects.get(id = request.data['localization'])
         watering = {
-            'minumum':14,
+            'minimum':14,
             'frequent':7,
             'average':12
         }
-        print(request.data)
-        print(request.data['photo'])
+        if isinstance(request.data['photo'], str):
+            photo = requests.get(request.data['photo'])
+            photo = ImageFile(io.BytesIO(photo.content), name=request.data['name'].replace(' ', '_') + '.jpg')
+        else :
+            photo = request.data['photo']
         Plant.objects.create(
             name=request.data['name'],
-            photo=request.data['photo'],
+            photo=photo,
             localization=room,
             sunlight=request.data['sunlight'],
-            water_how_often=watering(request.data['watering']),
+            water_how_often=watering[request.data['watering']],
         )
         return Response('data sent')
 
