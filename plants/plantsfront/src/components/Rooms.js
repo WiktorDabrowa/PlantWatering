@@ -2,16 +2,12 @@ import React from "react";
 import Plant from "./Plant";
 
 
-export default function Rooms() {
+export default function Rooms({seed,reload}) {
 
     const [rooms,setRooms] = React.useState([])
     const [plants,setPlants] = React.useState([])
-    const [seed,setSeed] = React.useState(true)
     const [openRooms, setOpenRooms] = React.useState(window.localStorage.getItem('openRooms') === null ? '' : window.localStorage.getItem('openRooms'))
-    function reload(){
-        console.log('Reloading Component')
-        setSeed(!seed)
-    }
+    
     
     React.useEffect(() => {
         fetch('http://127.0.0.1:8000/rooms')
@@ -31,11 +27,8 @@ export default function Rooms() {
             setOpenRooms(openRooms.replace(id.toString(),''))
             window.localStorage.setItem('openRooms', openRooms.replace(id.toString(),''))
         } else {
-            console.log(id.toString())
-            console.log(openRooms)
             setOpenRooms(openRooms.concat('',id.toString()))
             window.localStorage.setItem('openRooms', openRooms.concat('',id.toString()))
-            console.log(window.localStorage.getItem('openRooms'))
         }
         container.classList.toggle('not_shown') 
     }

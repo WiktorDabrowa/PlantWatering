@@ -305,7 +305,7 @@ button:focus{
   flex-direction: column;
   gap:0.5rem
 }
-.side_panel_form > * {
+.side_panel_form > input, .side_panel_form > select {
   height:2rem;
   border-radius: 1rem;
   padding-left:1rem;
@@ -331,4 +331,10 @@ button:focus{
 }
 .current_plant_data_span{
   font-weight: bold;
+}
+.errors{
+  border:1px solid red
+}
+.error{
+  color:red
 }

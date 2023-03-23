@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function AddPlant({currentPlant, showPanel}) {
+export default function AddPlant({currentPlant, showPanel, reload}) {
     const [rooms, setRooms] = React.useState([])
     const [form,setForm] = React.useState({
         name:'',
@@ -9,7 +9,21 @@ export default function AddPlant({currentPlant, showPanel}) {
         sunlight:'',
         photo : null
     })
+    const [errors,setErrors] = React.useState([])
 
+    function validateForm() {
+        setErrors([])
+        let errors = []
+        for (const [key,value] of Object.entries(form)) {
+            if (value === '' || value === null) {
+                errors.push(key)
+            }
+        }
+        setErrors(errors)
+        return errors
+    }
+    console.log(errors)
+    
     // Fetch room data from the server  
     React.useEffect(() => {
         fetch('http://127.0.0.1:8000/rooms')
@@ -30,9 +44,8 @@ export default function AddPlant({currentPlant, showPanel}) {
         return <span className='current_plant_data_span'>{str}</span>
     }
 
-    // Sends form data to the server to create
-    // new instance of Plant
-    function send(e) {
+    function sendData() {
+        console.log('sent')
         const uploadData = new FormData()
         uploadData.append('name', form.name)
         uploadData.append('localization', form.localization)
@@ -49,6 +62,16 @@ export default function AddPlant({currentPlant, showPanel}) {
         })
         .then((response) => response.json())
         .then ((data) => console.log(data))
+        reload()
+    }
+    // Sends form data to the server to create
+    // new instance of Plant
+    function checkForm(e) {
+        e.preventDefault()
+        let errors = validateForm()
+        if (errors.length === 0) {
+            sendData()
+        }
     }
 
     // Handle change of form
@@ -62,18 +85,42 @@ export default function AddPlant({currentPlant, showPanel}) {
              }
          })
     }
-
+    // Handle difference in API defaul_photo object structure
+    function getSrc(photoObject) {
+        let src = ''
+        if (photoObject === null) {
+            src = '/outline_plant.webp'
+        } else if (!Object.keys(photoObject).includes('medium_url')) {
+            src = '/outline_plant.webp'
+        } else  {
+            src = photoObject.medium_url
+        }
+        return src
+    } 
     // Populate form with data from external api
     function populateForm() {
+
+        function handleDifferentDataTypes(data) {
+            let result = ''
+            if (typeof data === 'string') {
+                result = data.split(' ').join('_').toLowerCase()
+            } else if (typeof data === 'object' && data.length !== undefined){
+                result = data[0].split(' ').join('_').toLowerCase()
+            }
+            return result
+        }
         const photo_url = currentPlant.default_image.original_url
         setForm({
             name:`${currentPlant.common_name}`,
             localization:'',
-            watering:`${currentPlant.watering}`,
-            sunlight:`${currentPlant.sunlight}`,
+            watering:`${handleDifferentDataTypes(currentPlant.watering)}`,
+            sunlight:`${handleDifferentDataTypes(currentPlant.sunlight)}`,
             photo:photo_url !== null && photo_url.lenght !== 0 ? photo_url : ''
         })
     }
+    const errorField = errors.map(error =>{
+        return <div key={error} className='error'>{error}</div>
+    })
     const room_options = rooms.map(room => {
         return <option key={room.id} value={room.id}>{room.name}</option>
     })
@@ -87,7 +134,7 @@ export default function AddPlant({currentPlant, showPanel}) {
             </button>
             { (Object.keys(currentPlant).length !== 0) &&
             <div className='side_panel_current_plant'>
-                <img alt='...'className='current_plant_photo' src={currentPlant.default_image.medium_url}/>
+                <img alt='...'className='current_plant_photo' src={getSrc(currentPlant.default_image)}/>
                 <div className='current_plant_data'>Common Name : {display(currentPlant.common_name)}</div>
                 <div className='current_plant_data'>Scientific Name : {display(currentPlant.scientific_name)}</div>
                 <div className='current_plant_data'>Other names : {display(currentPlant.other_name)}</div>
@@ -98,7 +145,7 @@ export default function AddPlant({currentPlant, showPanel}) {
             {(Object.keys(currentPlant).length === 0) && 
                 <h2>New Plant</h2> 
             }
-            <form onSubmit={send} className='side_panel_form'>
+            <form onSubmit={checkForm} className='side_panel_form'>
                 <input placeholder='Name of plant'onChange={handleChange} value={form.name} className='form_input' autoComplete='off' name='name'></input>
                 <select onChange={handleChange} value={form.localization} className='form_input' autoComplete='off' name='localization'>
                     <option value='' disabled selected hidden>Choose a room...</option> 
@@ -117,6 +164,12 @@ export default function AddPlant({currentPlant, showPanel}) {
                     <option value='full_sun'>Full sunlight</option>
                 </select>
                 <input type='file' onChange={handleChange} className='form_input' autoComplete='off' name='photo'></input>
+                {errors.length !== 0 && 
+                    <div className="errors">
+                        These fields are still empty:
+                        {errorField}
+                    </div>
+}
                 <button className='form_submit'>Send</button>
             </form>
         </div>

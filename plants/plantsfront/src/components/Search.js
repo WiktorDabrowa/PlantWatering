@@ -50,7 +50,6 @@ export default function Search({sidePanel, searching, setSearch}) {
     // Create elements in popup window
     const items = filtered_plants.map(item => {
         function image() {
-            // Kazdy zawiera default_image
             let src = ''
             if (item.default_image === null) {
                 src = '/outline_plant.webp'

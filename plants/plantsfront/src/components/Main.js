@@ -6,6 +6,12 @@ import AddPlant from "./AddPlant";
 export default function Main() {
     let [searching,setSearching] = React.useState(false)
     let [currentPlant, setCurrentPlant] = React.useState({})
+    const [seed,setSeed] = React.useState(true)
+    
+    function reload(){
+        console.log('Reloading Component')
+        setSeed(!seed)
+    }
     function search (event) {
         if (event.target.tagName === 'INPUT') {
             setSearching(true)
@@ -39,10 +45,13 @@ export default function Main() {
                 searching = {searching} 
                 setSearch = {search}/>
             <div className='content_container'>
-                <Rooms />
+                <Rooms 
+                    reload={() => reload()}
+                    seed={seed}/>
                 <AddPlant 
                     currentPlant={currentPlant}
-                    showPanel = {showPanel}/>
+                    showPanel = {showPanel}
+                    reload={() => reload()}/>
             </div>
         </div>
     )
