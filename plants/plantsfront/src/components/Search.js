@@ -4,8 +4,10 @@ export default function Search({sidePanel, searching, setSearch}) {
     // States:
     let [plants,setPlants] = React.useState([])
     let [filtered_plants, setFilteredPlants] = React.useState([])
+    
 
     // Search outside database:
+
     function search(event){
         // Starts search if query is longer than 3 characters
         if (event.target.value.length < 3) {
@@ -50,6 +52,7 @@ export default function Search({sidePanel, searching, setSearch}) {
     // Create elements in popup window
     const items = filtered_plants.map(item => {
         function image() {
+
             let src = ''
             if (item.default_image === null) {
                 src = '/outline_plant.webp'
@@ -63,7 +66,7 @@ export default function Search({sidePanel, searching, setSearch}) {
         }
         return (
             <div key={item.id} onClick={(e) => sidePanel(e, item)} className="plant_autofill">
-                <img className='plant_autofill_photo' src={image()}/>
+                <img alt='Not found..'className='plant_autofill_photo' src={image()}/>
                 <div className='plant_autofill_data'>
                     <div className='common_name'>{item.common_name.slice(0,1).toUpperCase() + item.common_name.slice(1)}</div>
                 </div>

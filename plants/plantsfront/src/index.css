@@ -3,7 +3,7 @@ body {
   padding:0;
   margin:0;
   overflow-y:scroll;
-  height:100vh
+  height:100vh;
 }
 button{
   background-color: transparent;
@@ -247,7 +247,7 @@ button:focus{
   color:white
 }
 .water_btn:hover{
-  color: seagreen;
+  color:dodgerblue;
   cursor:pointer
 }
 .plant_delete_btn{
@@ -269,12 +269,12 @@ button:focus{
   position:fixed;
   overflow:hidden;
   padding:1rem;
-  padding-top:2rem;
+  padding-top:0;
   top:10%;
   right:-30%;
   height:80vh;
   flex-basis:0;
-  background-color: rgba(46, 139, 86, 0.711);
+  background-color: rgba(46, 139, 86, 0.9);
   transition:1s;
   white-space: nowrap;
   z-index: 3;
@@ -282,6 +282,10 @@ button:focus{
   max-width: 300px;
   border-radius: 1rem;
   overflow-y:auto
+}
+.side_panel_newplant{
+  margin:0;
+  margin-bottom:0.5rem;
 }
 .side_panel::-webkit-scrollbar{
   display:none
@@ -291,25 +295,36 @@ button:focus{
   white-space:normal;
 }
 .side_panel_closebtn{
-  position: absolute;
+  position: sticky;
   border:none;
   background-color: transparent;
   padding:0;
-  right:0;
+  z-index:2;
+  align-self: flex-end;
   top:0;
+  width:15%;
+  margin-left:85%;
   color:white;
-  mix-blend-mode: difference;
+  transition: 0.5s;
+}
+.side_panel_closebtn:hover{
+  color:pink
 }
 .side_panel_form{
   display:flex;
   flex-direction: column;
   gap:0.5rem
 }
-.side_panel_form > input, .side_panel_form > select {
+.side_panel_form > input, .side_panel_form > select, .side_panel_form > label {
   height:2rem;
   border-radius: 1rem;
-  padding-left:1rem;
-  border:none
+  padding-left:0.5rem;
+  padding-right:0.5rem;
+  border:none;
+  transition:1s
+}
+.side_panel_form>input:hover, .side_panel_form>select:hover, .side_panel_form > label:hover{
+  background-color: pink;
 }
 .side_panel_form>*:focus{
   outline:none;
@@ -317,6 +332,43 @@ button:focus{
 }
 .side_panel_form_photo_div{
   display:flex
+}
+.form_submit{
+  height:2rem;
+  border-radius:1rem;
+  background-color: white;
+  font-size:1.5rem;
+  transition:0.5s;
+  background: linear-gradient(0.25turn,white,pink,hotpink);
+  background-size: 500%;
+  background-position: left;
+}
+.form_submit:hover{
+  background-position:center;
+  cursor:pointer
+}
+.form_submit:active{
+  background-position:right;
+  cursor:pointer
+}
+#photo_input{
+  display:none
+}
+.photo_input_label{
+  display:flex;
+  align-items: center;
+  cursor:pointer;
+  background-color: white;
+  transition:0.5s;
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.photo_input_label:hover{
+  background-color: pink;
+}
+.photo_input_label:active{
+  background-color: hotpink;
 }
 .side_panel_current_plant{
   display:flex;
@@ -332,8 +384,25 @@ button:focus{
 .current_plant_data_span{
   font-weight: bold;
 }
+.populate_form_btn{
+  background-color: white;
+  height:2rem;
+  border-radius:1rem;
+  margin-bottom:2rem;
+  margin-top:0.5rem
+}
 .errors{
-  border:1px solid red
+  border:1px solid red;
+  padding:0.5rem;
+  background-color: rgba(255, 192, 203, 0.8);
+  border-radius: 1rem;
+}
+.errors_caption {
+  margin:0
+}
+.errors>ul{
+  margin:0;
+  padding-left:1rem
 }
 .error{
   color:red

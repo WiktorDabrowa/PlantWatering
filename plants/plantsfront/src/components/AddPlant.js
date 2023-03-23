@@ -1,16 +1,10 @@
 import React from "react";
 
-export default function AddPlant({currentPlant, showPanel, reload}) {
+export default function AddPlant({currentPlant, showPanel, reload, form, setForm}) {
     const [rooms, setRooms] = React.useState([])
-    const [form,setForm] = React.useState({
-        name:'',
-        localization:'',
-        watering:'',
-        sunlight:'',
-        photo : null
-    })
     const [errors,setErrors] = React.useState([])
-
+    // const [serverError,setServerError] = React.useState('')
+    
     function validateForm() {
         setErrors([])
         let errors = []
@@ -119,16 +113,17 @@ export default function AddPlant({currentPlant, showPanel, reload}) {
         })
     }
     const errorField = errors.map(error =>{
-        return <div key={error} className='error'>{error}</div>
+        return <li key={error} className='error'>{error.slice(0,1).toUpperCase() + error.slice(1)}</li>
     })
     const room_options = rooms.map(room => {
         return <option key={room.id} value={room.id}>{room.name}</option>
     })
 
     return (
+        <div className='side_panel_wrapper'>
         <div className='side_panel'>
             <button className='side_panel_closebtn' onClick = {showPanel}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-x" viewBox="0 0 20 20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-x" viewBox="0 0 15 15">
                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                 </svg>
             </button>
@@ -140,10 +135,10 @@ export default function AddPlant({currentPlant, showPanel, reload}) {
                 <div className='current_plant_data'>Other names : {display(currentPlant.other_name)}</div>
                 <div className='current_plant_data'>Preffered watering : {display(currentPlant.watering)}</div>
                 <div className='current_plant_data'>Preffered sunlight : {display(currentPlant.sunlight)}</div>
-                <button onClick={populateForm}>Use this data</button>
+                <button className='populate_form_btn'onClick={populateForm}>Use this data</button>
             </div>}
             {(Object.keys(currentPlant).length === 0) && 
-                <h2>New Plant</h2> 
+            <h2 className='side_panel_newplant'>New Plant</h2> 
             }
             <form onSubmit={checkForm} className='side_panel_form'>
                 <input placeholder='Name of plant'onChange={handleChange} value={form.name} className='form_input' autoComplete='off' name='name'></input>
@@ -152,26 +147,34 @@ export default function AddPlant({currentPlant, showPanel, reload}) {
                     {room_options}
                 </select>
                 <select placeholder='watering'onChange={handleChange} value={form.watering} className='form_input' autoComplete='off' name='watering'>
+                    <option value='' disabled selected hidden>How often does it need to be watered?</option>
                     <option value='none'>None</option>
                     <option value='minimum'>Minimum</option>
                     <option value='average'>Average</option>
                     <option value='frequent'>Frequent</option>
                 </select>
-                <select name='sunlight' onChange={handleChange} value={form.sunlight} className="form_sunlight_choiceoptions">
+                <select name='sunlight' onChange={handleChange} value={form.sunlight} className="form_sunlight">
+                    <option value='' disabled selected hidden>What position does it like?</option>
                     <option value='full_shade'>Full Shade</option>
                     <option value='part_shade'>Part shade</option>
                     <option value='sun-part_shade'>Indirect sunlight</option>
                     <option value='full_sun'>Full sunlight</option>
                 </select>
-                <input type='file' onChange={handleChange} className='form_input' autoComplete='off' name='photo'></input>
+                <label className='photo_input_label'for='photo_input'>
+                    <input id='photo_input' type='file' onChange={handleChange} className='form_input' autoComplete='off' name='photo'></input>
+                    Select photo
+                </label>
                 {errors.length !== 0 && 
                     <div className="errors">
-                        These fields are still empty:
-                        {errorField}
+                        <h3 className='errors_caption'>These fields are required:</h3>
+                        <ul>
+                            {errorField}
+                        </ul>
                     </div>
-}
+                }
                 <button className='form_submit'>Send</button>
             </form>
+        </div>
         </div>
     )
 }

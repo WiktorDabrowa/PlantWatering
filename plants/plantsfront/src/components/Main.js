@@ -7,7 +7,22 @@ export default function Main() {
     let [searching,setSearching] = React.useState(false)
     let [currentPlant, setCurrentPlant] = React.useState({})
     const [seed,setSeed] = React.useState(true)
-    
+    const [form,setForm] = React.useState({
+        name:'',
+        localization:'',
+        watering:'',
+        sunlight:'',
+        photo : null
+    })
+    function clearForm() { 
+        setForm({
+            name:'',
+            localization:'',
+            watering:'',
+            sunlight:'',
+            photo : null 
+        })
+    }
     function reload(){
         console.log('Reloading Component')
         setSeed(!seed)
@@ -29,6 +44,7 @@ export default function Main() {
         if (plant === undefined) {
             console.log('New Plant')
             setCurrentPlant({})
+            clearForm()
         } else if (currentPlant !== plant){
             setCurrentPlant(plant)
         }
@@ -51,7 +67,9 @@ export default function Main() {
                 <AddPlant 
                     currentPlant={currentPlant}
                     showPanel = {showPanel}
-                    reload={() => reload()}/>
+                    reload={() => reload()}
+                    form={form}
+                    setForm={setForm}/>
             </div>
         </div>
     )
