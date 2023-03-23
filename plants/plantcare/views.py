@@ -8,6 +8,7 @@ import json
 from . import apikey
 import io
 from django.core.files.images import ImageFile
+from django.core.exceptions import ValidationError
 
 
 @api_view(['POST'])
@@ -41,14 +42,21 @@ def plants(request):
             photo = ImageFile(io.BytesIO(photo.content), name=request.data['name'].replace(' ', '_') + '.jpg')
         else :
             photo = request.data['photo']
-        Plant.objects.create(
+        plant = Plant(
             name=request.data['name'],
             photo=photo,
             localization=room,
             sunlight=request.data['sunlight'],
-            water_how_often=watering[request.data['watering']],
+            water_how_often=watering[request.data['watering']]
         )
-        return Response('data sent')
+        try:
+            plant.full_clean()
+        except ValidationError as e:
+            print('ValidationError')
+            print(e)
+            return Response (e)
+        plant.save()
+        return Response('Plant created')
 
 @api_view(['GET','PUT','DELETE'])
 def plant(request,id):

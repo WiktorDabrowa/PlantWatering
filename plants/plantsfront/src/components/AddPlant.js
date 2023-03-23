@@ -3,7 +3,7 @@ import React from "react";
 export default function AddPlant({currentPlant, showPanel, reload, form, setForm}) {
     const [rooms, setRooms] = React.useState([])
     const [errors,setErrors] = React.useState([])
-    // const [serverError,setServerError] = React.useState('')
+    const [serverError,setServerError] = React.useState(false)
     
     function validateForm() {
         setErrors([])
@@ -55,8 +55,15 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
             body: uploadData
         })
         .then((response) => response.json())
-        .then ((data) => console.log(data))
-        reload()
+        .then ((data) => {
+            console.log(data)
+            if (data !== 'Plant created') {
+                setServerError(data[0][1])
+            } else{
+                reload()
+            }
+        })
+        
     }
     // Sends form data to the server to create
     // new instance of Plant
@@ -172,6 +179,11 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
                         </ul>
                     </div>
                 }
+                {serverError && 
+                <div className='server_error'>
+                    <p className='server_error_label'>Server Error:</p>
+                    <p>{serverError}</p>
+                </div>}
                 <button className='form_submit'>Send</button>
             </form>
         </div>
