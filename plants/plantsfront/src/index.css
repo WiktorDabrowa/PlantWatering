@@ -1,9 +1,17 @@
-
+@keyframes background-sweep {
+  0% {background-position: left;}
+  100% {background-position: right;}
+}
+@keyframes wave {
+  0% {filter:blur(1px)}
+  100% {filter:blur(0)}
+}
 body {
   padding:0;
   margin:0;
   overflow-y:scroll;
   height:100vh;
+  
 }
 button{
   background-color: transparent;
@@ -16,17 +24,20 @@ button:focus{
   height:100%
 }
 .main_container{
-  background-color: pink;
+  background-size:400% 400%;
+  background-image:linear-gradient(0.13turn,seagreen,pink,hotpink);
+  animation:background-sweep 20s infinite alternate;
   height:100%
 }
 /* Search bar */
 .search_container{
-  background-color: seagreen;
+  background-color: rgba(46, 139, 86, 0.758);
   margin:0;
   height:2rem;
-  padding:0.5rem;
+  padding:0.8rem;
   padding-left:2rem;
   overflow-y: visible;
+  border-bottom: 1px solid honeydew
 }
 .search_input{
   height:100%;
@@ -37,13 +48,30 @@ button:focus{
   width:10rem;
   position:relative;
   border-radius:1rem;
-  padding-left:1rem
+  padding-left:1rem;
+  border:1px solid honeydew;
+  position:relative
 
 }
 .search_input:focus{
   border:none;
   outline:none;
   width:20rem;
+}
+.waterAll_btn{
+  color:honeydew;
+  padding:0;
+  margin:0;
+  position:absolute;
+  top:0;
+  right:0;
+  padding-right: 2rem;
+  height:3.6rem;
+  transition:0.5s;
+}
+.waterAll_btn:hover{
+  color:dodgerblue;
+  cursor:pointer
 }
 
 .search_autofill{
@@ -117,22 +145,25 @@ button:focus{
 .rooms{
   padding-top:1rem;
   flex:4;
-  background-color: pink;
 }
 .room_container{
   margin: 1rem;
   position:relative;
   z-index: 1;
-  transition:0.5s
+  transition:0.5s;
+  
+  border-radius: 1rem;
 }
 .room_container > h2 {
   background-color: rgb(253, 141, 160);
   height:2rem;
+  padding:0.5rem;
   padding-left:1rem;
   text-justify: center;
   margin:0;
   transition:1s;
-  border-radius:1rem 1rem 0 0
+  border-radius:1rem 1rem 0 0;
+  border:1px solid honeydew
 }
 .room_container>h2:hover{
   cursor:pointer
@@ -148,14 +179,14 @@ button:focus{
   position:absolute;
   right:0.5rem;
   top:0;
-  height:2rem;
+  height:3rem;
   z-index:2;
   transition:1s;
   transform:rotate(180deg);
   pointer-events: none;
 }
 .room_plants{
-  background-color: blanchedalmond;
+  backdrop-filter:blur(10px); 
   display:flex;
   flex-direction:row;
   overflow: hidden;
@@ -165,9 +196,15 @@ button:focus{
   flex-wrap: wrap;
   max-height:50rem;
   border-radius: 0 0 1rem 1rem;
+  border:1px solid honeydew;
+  border-top:none
 }
 .room_container.not_shown{
-  margin:0 1rem 0 1rem
+  margin:0 1rem 0 1rem;
+  border:none
+}
+.room_container.not_shown > .room_plants{
+  border:none;
 }
 .room_container.not_shown>h2{
   border-radius:0
@@ -198,7 +235,8 @@ button:focus{
   flex-shrink:1;
   position:relative;
   border-radius:10px;
-  overflow:hidden
+  overflow:hidden;
+  border:1px solid honeydew
 }
 .plant_photo{
   width:100%;
@@ -262,6 +300,19 @@ button:focus{
 .plant_delete_btn:hover{
   color:crimson;
   cursor:pointer
+}
+.plant_edit_btn{
+  position:absolute;
+  right:0;
+  top:33%;
+  transition:1s;
+  margin:0.5rem;
+  padding:0;
+  color:white
+}
+.plant_edit_btn:hover{
+  cursor:pointer;
+  color:seagreen
 }
 
 /* AddPlant */

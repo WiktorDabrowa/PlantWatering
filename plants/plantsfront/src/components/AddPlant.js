@@ -3,20 +3,22 @@ import React from "react";
 export default function AddPlant({currentPlant, showPanel, reload, form, setForm}) {
     const [rooms, setRooms] = React.useState([])
     const [errors,setErrors] = React.useState([])
-    const [serverError,setServerError] = React.useState(false)
+    const [serverError,setServerError] = React.useState('')
     
     function validateForm() {
         setErrors([])
         let errors = []
         for (const [key,value] of Object.entries(form)) {
             if (value === '' || value === null) {
-                errors.push(key)
+                errors.push({
+                    key:value
+                })
             }
         }
         setErrors(errors)
         return errors
     }
-    console.log(errors)
+    console.log(serverError)
     
     // Fetch room data from the server  
     React.useEffect(() => {
@@ -58,7 +60,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         .then ((data) => {
             console.log(data)
             if (data !== 'Plant created') {
-                setServerError(data[0][1])
+                setServerError(data)
             } else{
                 reload()
             }
@@ -112,13 +114,14 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         }
         const photo_url = currentPlant.default_image.original_url
         setForm({
-            name:`${currentPlant.common_name}`,
+            name:`${currentPlant.common_name.slice(0,1).toUpperCase() + currentPlant.common_name.slice(1)}`,
             localization:'',
             watering:`${handleDifferentDataTypes(currentPlant.watering)}`,
             sunlight:`${handleDifferentDataTypes(currentPlant.sunlight)}`,
             photo:photo_url !== null && photo_url.lenght !== 0 ? photo_url : ''
         })
     }
+    
     const errorField = errors.map(error =>{
         return <li key={error} className='error'>{error.slice(0,1).toUpperCase() + error.slice(1)}</li>
     })
@@ -182,7 +185,11 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
                 {serverError && 
                 <div className='server_error'>
                     <p className='server_error_label'>Server Error:</p>
-                    <p>{serverError}</p>
+                    {serverError.map(error => {
+                        return (
+                            <p>{error[0].slice(0,1).toUpperCase() + error[0].slice(1)} : {error[1]}</p>
+                        )
+                    })}
                 </div>}
                 <button className='form_submit'>Send</button>
             </form>

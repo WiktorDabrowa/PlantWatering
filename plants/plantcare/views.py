@@ -87,3 +87,10 @@ def water(request, id):
     plant.save()
     serializer = PlantSerializer(plant, many=False)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+def water_all(request):
+    plants = Plant.objects.all()
+    for plant in plants:
+        plant.save()
+    return Response('Watered all plants')
