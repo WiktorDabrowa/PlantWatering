@@ -18,7 +18,6 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         setErrors(errors)
         return errors
     }
-    console.log(serverError)
     
     // Fetch room data from the server  
     React.useEffect(() => {

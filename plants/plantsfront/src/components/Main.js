@@ -6,6 +6,7 @@ import AddPlant from "./AddPlant";
 export default function Main() {
     let [searching,setSearching] = React.useState(false)
     let [currentPlant, setCurrentPlant] = React.useState({})
+    const [addingRoom, setAddingRoom] = React.useState(false)
     const [seed,setSeed] = React.useState(true)
     const [form,setForm] = React.useState({
         name:'',
@@ -14,6 +15,7 @@ export default function Main() {
         sunlight:'',
         photo : null
     })
+
     function clearForm() { 
         setForm({
             name:'',
@@ -54,16 +56,35 @@ export default function Main() {
             }
         }
     }
+    function waterAllPlants() {
+        fetch('http://127.0.0.1:8000/water_all', {
+            method:'PUT'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data)
+            document.querySelector('.water_animation').style.animationPlayState = 'running'
+            reload()
+        })
+    }
+    function addRoom() {
+        console.log('adding room')
+        setAddingRoom(!addingRoom)
+    }
     return (
         <div onClick = {searching ? search : undefined} className='main_container'>
+            <div className='water_animation' />
             <Search 
                 sidePanel = {sidePanel} 
                 searching = {searching} 
-                setSearch = {search}/>
+                setSearch = {search}
+                waterAllPlants = {() => waterAllPlants()}
+                addRoom = {() => addRoom()}/>
             <div className='content_container'>
                 <Rooms 
                     reload={() => reload()}
-                    seed={seed}/>
+                    seed={seed}
+                    addingRoom={addingRoom}/>
                 <AddPlant 
                     currentPlant={currentPlant}
                     showPanel = {showPanel}

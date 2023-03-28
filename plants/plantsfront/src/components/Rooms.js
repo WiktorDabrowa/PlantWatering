@@ -1,13 +1,14 @@
 import React from "react";
 import Plant from "./Plant";
+import AddRoom from "./AddRoom"
 
 
-export default function Rooms({seed,reload}) {
+export default function Rooms({seed,reload,addingRoom}) {
 
     const [rooms,setRooms] = React.useState([])
     const [plants,setPlants] = React.useState([])
     const [openRooms, setOpenRooms] = React.useState(window.localStorage.getItem('openRooms') === null ? '' : window.localStorage.getItem('openRooms'))
-    
+
     
     React.useEffect(() => {
         fetch('http://127.0.0.1:8000/rooms')
@@ -58,6 +59,7 @@ export default function Rooms({seed,reload}) {
     return (
         <div className='rooms'>
             {containers}
+            {addingRoom ? <AddRoom /> : null}
         </div>
     )
 

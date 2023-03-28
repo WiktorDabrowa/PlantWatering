@@ -6,6 +6,11 @@
   0% {filter:blur(1px)}
   100% {filter:blur(0)}
 }
+@keyframes water_wave{
+  0%{top:-400%}
+  40%{top:0}
+  100%{top:100%}
+}
 body {
   padding:0;
   margin:0;
@@ -27,9 +32,21 @@ button:focus{
   background-size:400% 400%;
   background-image:linear-gradient(0.13turn,seagreen,pink,hotpink);
   animation:background-sweep 20s infinite alternate;
-  min-height:100vh
+  min-height:100vh;
+  position:relative;
+  overflow-y: hidden;
+}
+.water_animation{
+  width:100%;
+  height: 1000px;
+  z-index:3;
+  background-color: rgba(30, 143, 255, 0.537);
+  position:absolute;
+  top:-400%;
+  animation:water_wave 3s paused 1s
 }
 /* Search bar */
+
 .search_container{
   background-color: rgba(46, 139, 86);
   margin:0;
@@ -37,6 +54,7 @@ button:focus{
   padding:0.8rem;
   padding-left:2rem;
   overflow-y: visible;
+  position:relative;
   border-bottom: 1px solid honeydew
 }
 .search_input{
@@ -58,16 +76,21 @@ button:focus{
   outline:none;
   width:20rem;
 }
-.waterAll_btn{
-  color:honeydew;
-  padding:0;
-  margin:0;
+.buttons_container{
+
   position:absolute;
-  top:0;
   right:0;
-  padding-right: 2rem;
   height:3.6rem;
+  top:0;
+  display:flex
+}
+.search_btn{
+  color:honeydew;
   transition:0.5s;
+}
+.addRoom_btn:hover{
+  color:hotpink;
+  cursor:pointer
 }
 .waterAll_btn:hover{
   color:rgb(79, 167, 255);
