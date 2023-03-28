@@ -1,6 +1,14 @@
 import React from "react";
+import {DateTime} from 'luxon'
 
 export default function Plant({plant,reload}) {
+    const [needsWatering,setNeedsWatering] = React.useState(false)
+
+    // Convert server data to DateTime format:
+    const last_watering = DateTime.fromISO(plant.last_watering)
+    const next_watering = last_watering.plus({days:parseInt(plant.water_how_often)})
+
+    
     function water() {
         fetch(`http://127.0.0.1:8000/water/${plant.id}`,{
             method: 'PUT'
@@ -20,7 +28,7 @@ export default function Plant({plant,reload}) {
     }
 
     return (
-        <div className='plant'>
+        <div className={next_watering < DateTime.now() ? 'plant needs_watering' : 'plant'}>
             <div className='plant_data'>
                 <h2 className='plant_name'>{plant.name}</h2>
                 <div className='plant_sunlight'>

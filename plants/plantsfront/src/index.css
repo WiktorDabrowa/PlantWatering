@@ -27,11 +27,11 @@ button:focus{
   background-size:400% 400%;
   background-image:linear-gradient(0.13turn,seagreen,pink,hotpink);
   animation:background-sweep 20s infinite alternate;
-  height:100%
+  min-height:100vh
 }
 /* Search bar */
 .search_container{
-  background-color: rgba(46, 139, 86, 0.758);
+  background-color: rgba(46, 139, 86);
   margin:0;
   height:2rem;
   padding:0.8rem;
@@ -50,7 +50,7 @@ button:focus{
   border-radius:1rem;
   padding-left:1rem;
   border:1px solid honeydew;
-  position:relative
+  position:relative;
 
 }
 .search_input:focus{
@@ -70,7 +70,7 @@ button:focus{
   transition:0.5s;
 }
 .waterAll_btn:hover{
-  color:dodgerblue;
+  color:rgb(79, 167, 255);
   cursor:pointer
 }
 
@@ -84,8 +84,8 @@ button:focus{
   overflow-y:auto;
   width:25rem;
   border-radius:1rem;
-  border:1px solid black;
-  box-shadow:0 0 5px black
+  border:1px solid honeydew;
+  box-shadow:0 0 5px honeydew
 }
 
 .search_autofill::-webkit-scrollbar{
@@ -94,7 +94,7 @@ button:focus{
 
 .plant_autofill{
   padding:0.2rem;
-  padding-left:1.5rem;
+  padding-left:0.5rem;
   display:flex;
   flex-direction: row;
   overflow-y: auto;
@@ -110,7 +110,7 @@ button:focus{
   background-color: pink;
   cursor:pointer;
   color:hotpink;
-  z-index:3
+  z-index:3;
 }
 .new_plant_svg{
   width:2rem
@@ -151,7 +151,7 @@ button:focus{
   position:relative;
   z-index: 1;
   transition:0.5s;
-  
+  color:honeydew;
   border-radius: 1rem;
 }
 .room_container > h2 {
@@ -237,6 +237,9 @@ button:focus{
   border-radius:10px;
   overflow:hidden;
   border:1px solid honeydew
+}
+.plant.needs_watering>.plant_photo{
+  filter:grayscale(1)
 }
 .plant_photo{
   width:100%;
