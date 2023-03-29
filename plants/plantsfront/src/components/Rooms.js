@@ -3,7 +3,7 @@ import Plant from "./Plant";
 import AddRoom from "./AddRoom"
 
 
-export default function Rooms({seed,reload,addingRoom}) {
+export default function Rooms({seed,reload,addingRoom,sidePanel,setForm}) {
 
     const [rooms,setRooms] = React.useState([])
     const [plants,setPlants] = React.useState([])
@@ -37,7 +37,12 @@ export default function Rooms({seed,reload,addingRoom}) {
         let room_plants = plants.map((plant) => {
             if (plant.localization === room.id) {
                 return (
-                    <Plant plant={plant} key={plant.id} reload={() => reload()}/>
+                    <Plant 
+                        plant={plant} 
+                        key={plant.id} 
+                        reload={() => reload()}
+                        sidePanel={sidePanel}
+                        setForm={setForm}/>
                 )
             }
         })

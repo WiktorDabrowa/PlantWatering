@@ -41,7 +41,9 @@ export default function Main() {
         const side_panel = document.querySelector('.side_panel')
         side_panel.classList.toggle('show')
     }
-    function sidePanel(event, plant) {
+    function sidePanel(plant) {
+        console.log(plant)
+        console.log(form)
         const side_panel = document.querySelector('.side_panel')
         if (plant === undefined) {
             console.log('New Plant')
@@ -50,10 +52,8 @@ export default function Main() {
         } else if (currentPlant !== plant){
             setCurrentPlant(plant)
         }
-        if (event.target.classList.contains('plant_autofill')) {
-            if (!side_panel.classList.contains('show')) {
-                showPanel()
-            }
+        if (!side_panel.classList.contains('show')) {
+            showPanel()
         }
     }
     function waterAllPlants() {
@@ -84,7 +84,11 @@ export default function Main() {
                 <Rooms 
                     reload={() => reload()}
                     seed={seed}
-                    addingRoom={addingRoom}/>
+                    addingRoom={addingRoom}
+                    sidePanel={sidePanel}
+                    setForm={setForm}
+                    />
+
                 <AddPlant 
                     currentPlant={currentPlant}
                     showPanel = {showPanel}

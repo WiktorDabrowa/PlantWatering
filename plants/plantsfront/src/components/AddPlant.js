@@ -5,7 +5,10 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
     const [errors,setErrors] = React.useState([])
     const [serverError,setServerError] = React.useState('')
     
+    
+    
     function validateForm() {
+        // Check if any of the form inputs are empty
         setErrors([])
         let errors = []
         for (const [key,value] of Object.entries(form)) {
@@ -26,8 +29,8 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         .then((data) => setRooms(data))
     },[])
 
-    // Displays plant data in correct formatting
     function display(item){
+        // Displays plant data in correct formatting
         let str = ''
         if (item === null || item === undefined) {
             return str = 'Unknown'
@@ -39,8 +42,12 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         return <span className='current_plant_data_span'>{str}</span>
     }
 
-    function sendData() {
-        console.log('sent')
+    function sendData(mode) {
+        // Creates FormData instance and
+        // sends data to server;
+        // waits for response and checks if server responds
+        // with errors;
+        // if so, displays the errors
         const uploadData = new FormData()
         uploadData.append('name', form.name)
         uploadData.append('localization', form.localization)
@@ -52,32 +59,35 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
             uploadData.append('photo', form.photo, form.photo.name)
         }
         fetch('http://127.0.0.1:8000/plants', {
-            method:'POST',
+            method:mode,
             body: uploadData
         })
         .then((response) => response.json())
         .then ((data) => {
             console.log(data)
-            if (data !== 'Plant created') {
+            if (data !== 'Plant created' && data !== 'Edited plant') {
                 setServerError(data)
-            } else{
+            } else if (data =='OK') {
+                console.log(data)
+            } else {
                 reload()
             }
         })
         
     }
-    // Sends form data to the server to create
-    // new instance of Plant
+    
     function checkForm(e) {
+        // Server side validation
         e.preventDefault()
         let errors = validateForm()
         if (errors.length === 0) {
-            sendData()
+            console.log(e.target.querySelector('.form_submit'))
+            sendData(e.target.querySelector('.form_submit').dataset.mode)
         }
     }
 
-    // Handle change of form
     function handleChange(e) {
+        // Handle change of form
          setForm(prevForm => {
              const {name, value,files} = e.target
              return {
@@ -87,8 +97,8 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
              }
          })
     }
-    // Handle difference in API defaul_photo object structure
     function getSrc(photoObject) {
+        // Handle difference in API default_photo object structure
         let src = ''
         if (photoObject === null) {
             src = '/outline_plant.webp'
@@ -99,6 +109,9 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         }
         return src
     } 
+    function populateFormForEditing() {
+
+    }
     // Populate form with data from external api
     function populateForm() {
 
@@ -136,7 +149,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                 </svg>
             </button>
-            { (Object.keys(currentPlant).length !== 0) &&
+            { (Object.keys(currentPlant).length !== 0 && !Object.keys(currentPlant).includes('water_how_often')) &&
             <div className='side_panel_current_plant'>
                 <img alt='...'className='current_plant_photo' src={getSrc(currentPlant.default_image)}/>
                 <div className='current_plant_data'>Common Name : {display(currentPlant.common_name)}</div>
@@ -149,8 +162,13 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
             {(Object.keys(currentPlant).length === 0) && 
             <h2 className='side_panel_newplant'>New Plant</h2> 
             }
+            {Object.keys(currentPlant).includes('water_how_often') &&
+            <div className='side_panel_current_plant'>
+                <img className='current_plant_photo edit' src={'http://127.0.0.1:8000' + currentPlant.photo}/>
+            </div> 
+            }
             <form onSubmit={checkForm} className='side_panel_form'>
-                <input placeholder='Name of plant'onChange={handleChange} value={form.name} className='form_input' autoComplete='off' name='name'></input>
+                <input placeholder='Name of plant'onChange={handleChange} value={form.name} className='form_input' autoComplete='off' name='name' disabled={Object.keys(currentPlant).includes('water_how_often') ? 'true' : null}></input>
                 <select onChange={handleChange} value={form.localization} className='form_input' autoComplete='off' name='localization'>
                     <option value='' disabled selected hidden>Choose a room...</option> 
                     {room_options}
@@ -190,7 +208,11 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
                         )
                     })}
                 </div>}
-                <button className='form_submit'>Send</button>
+                {Object.keys(currentPlant).includes('water_how_often') ? 
+                <button data-mode='PUT' className='form_submit'>Edit</button>
+                :
+                <button data-mode='POST' className='form_submit'>Send</button>
+                }
             </form>
         </div>
         </div>

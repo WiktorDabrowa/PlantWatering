@@ -21,7 +21,7 @@ def requestData(request):
     return Response(r.json())
     
     
-@api_view(['GET','POST'])
+@api_view(['GET','POST','PUT'])
 def plants(request):
     print('Plants:')
     # GET request -> get all plants
@@ -57,6 +57,21 @@ def plants(request):
             return Response (e)
         plant.save()
         return Response('Plant created')
+    elif request.method == 'PUT':
+        print(request.data['photo'])
+        watering = {
+            'minimum':14,
+            'frequent':7,
+            'average':12
+        }
+        room = Room.objects.get(id = request.data['localization'])
+        plant = Plant.objects.get(name=request.data['name'])
+        plant.localization = room
+        plant.water_how_often = watering[request.data['watering']]
+        plant.sunlight = request.data['sunlight']
+        plant.photo = request.data['photo']
+        plant.save()
+        return Response('Edited plant')
 
 @api_view(['GET','PUT','DELETE'])
 def plant(request,id):
