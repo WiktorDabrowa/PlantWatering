@@ -57,6 +57,7 @@ def plants(request):
             return Response (e)
         plant.save()
         return Response('Plant created')
+    # Edit plant
     elif request.method == 'PUT':
         print(request.data['photo'])
         watering = {
@@ -64,13 +65,18 @@ def plants(request):
             'frequent':7,
             'average':12
         }
+        if isinstance(request.data['photo'], str):
+            photo = request.data['photo'][7:]
+        else:
+            photo = request.data['photo']
+        print(photo)
         room = Room.objects.get(id = request.data['localization'])
         plant = Plant.objects.get(name=request.data['name'])
         plant.localization = room
         plant.water_how_often = watering[request.data['watering']]
         plant.sunlight = request.data['sunlight']
-        plant.photo = request.data['photo']
-        plant.save()
+        plant.photo = photo
+        plant.save(update_fields=['localization','water_how_often','sunlight','photo'])
         return Response('Edited plant')
 
 @api_view(['GET','PUT','DELETE'])

@@ -6,7 +6,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
     const [serverError,setServerError] = React.useState('')
     
     
-    
+    console.log(form)
     function validateForm() {
         // Check if any of the form inputs are empty
         setErrors([])
@@ -67,7 +67,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
             console.log(data)
             if (data !== 'Plant created' && data !== 'Edited plant') {
                 setServerError(data)
-            } else if (data =='OK') {
+            } else if (data ==='OK') {
                 console.log(data)
             } else {
                 reload()
@@ -109,9 +109,6 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         }
         return src
     } 
-    function populateFormForEditing() {
-
-    }
     // Populate form with data from external api
     function populateForm() {
 

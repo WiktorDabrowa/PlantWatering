@@ -221,7 +221,7 @@ button:focus{
   border-top:none;
   background-size:400% 400%;
   background-image:linear-gradient(0.13turn,seagreen,pink);
-  animation:background-sweep 20s infinite alternate;
+  animation:background-sweep 50s infinite alternate;
 }
 .room_container.not_shown{
   margin:0 1rem 0 1rem;
@@ -460,7 +460,9 @@ button:focus{
   border-radius: 1rem;
 }
 .current_plant_photo.edit{
-  margin-bottom:1rem
+  margin-bottom:1rem;
+  aspect-ratio:1/1;
+  object-fit: cover;
 }
 .current_plant_data_span{
   font-weight: bold;
