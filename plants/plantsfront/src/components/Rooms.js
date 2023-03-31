@@ -3,7 +3,7 @@ import Plant from "./Plant";
 import AddRoom from "./AddRoom"
 
 
-export default function Rooms({seed,reload,addingRoom,sidePanel,setForm}) {
+export default function Rooms({seed,reload,addingRoom,setAddingRoom,sidePanel,setForm}) {
 
     const [rooms,setRooms] = React.useState([])
     const [plants,setPlants] = React.useState([])
@@ -64,7 +64,7 @@ export default function Rooms({seed,reload,addingRoom,sidePanel,setForm}) {
     return (
         <div className='rooms'>
             {containers}
-            {addingRoom ? <AddRoom /> : null}
+            {addingRoom ? <AddRoom reload={reload} setAddingRoom={setAddingRoom}/> : null}
         </div>
     )
 

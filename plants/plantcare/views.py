@@ -66,6 +66,7 @@ def plants(request):
             'average':12
         }
         if isinstance(request.data['photo'], str):
+            # Delete '/media/' from begining of string
             photo = request.data['photo'][7:]
         else:
             photo = request.data['photo']
@@ -95,12 +96,25 @@ def plant(request,id):
         return Response(f'{item} deleted')
     pass
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def rooms(request):
     rooms = Room.objects.all()
     if request.method == 'GET':
         serializer = RoomSerializer(rooms, many=True)
         return Response(serializer.data)
+    if request.method == "POST":
+        print(request.data['name'])
+        room = Room(
+            name=request.data['name']
+        )
+        try:
+            room.full_clean()
+        except ValidationError as e:
+            print('ValidationError')
+            print(e)
+            return Response (e)
+        room.save()
+        return Response('Room added')
 
 @api_view(['PUT'])
 def water(request, id):

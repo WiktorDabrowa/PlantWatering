@@ -6,7 +6,6 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
     const [serverError,setServerError] = React.useState('')
     
     
-    console.log(form)
     function validateForm() {
         // Check if any of the form inputs are empty
         setErrors([])

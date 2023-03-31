@@ -45,11 +45,13 @@ export default function Main() {
         console.log(plant)
         console.log(form)
         const side_panel = document.querySelector('.side_panel')
-        if (plant === undefined) {
+        if (plant === undefined || Object.keys(plant).length === 0) {
             console.log('New Plant')
             setCurrentPlant({})
+            console.log('Clearing')
             clearForm()
         } else if (currentPlant !== plant){
+            console.log('here')
             setCurrentPlant(plant)
         }
         if (!side_panel.classList.contains('show')) {
@@ -87,12 +89,13 @@ export default function Main() {
                     addingRoom={addingRoom}
                     sidePanel={sidePanel}
                     setForm={setForm}
+                    setAddingRoom={setAddingRoom}
                     />
 
                 <AddPlant 
                     currentPlant={currentPlant}
                     showPanel = {showPanel}
-                    reload={() => reload()}
+                    reload={reload}
                     form={form}
                     setForm={setForm}/>
             </div>
