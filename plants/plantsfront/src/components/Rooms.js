@@ -3,7 +3,7 @@ import Plant from "./Plant";
 import AddRoom from "./AddRoom"
 
 
-export default function Rooms({seed,reload,addingRoom,setAddingRoom,sidePanel,setForm}) {
+export default function Rooms({seed,reload,sidePanel,setForm}) {
 
     const [rooms,setRooms] = React.useState([])
     const [plants,setPlants] = React.useState([])
@@ -34,6 +34,7 @@ export default function Rooms({seed,reload,addingRoom,setAddingRoom,sidePanel,se
         container.classList.toggle('not_shown') 
     }
     const containers = rooms.map((room) => {
+        // eslint-disable-next-line
         let room_plants = plants.map((plant) => {
             if (plant.localization === room.id) {
                 return (
@@ -64,7 +65,7 @@ export default function Rooms({seed,reload,addingRoom,setAddingRoom,sidePanel,se
     return (
         <div className='rooms'>
             {containers}
-            {addingRoom ? <AddRoom reload={reload} setAddingRoom={setAddingRoom}/> : null}
+            <AddRoom reload={reload} />
         </div>
     )
 

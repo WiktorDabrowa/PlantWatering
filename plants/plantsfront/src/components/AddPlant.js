@@ -13,7 +13,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
         for (const [key,value] of Object.entries(form)) {
             if (value === '' || value === null) {
                 errors.push({
-                    key:value
+                    [key]:value
                 })
             }
         }
@@ -160,7 +160,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
             }
             {Object.keys(currentPlant).includes('water_how_often') &&
             <div className='side_panel_current_plant'>
-                <img className='current_plant_photo edit' src={'http://127.0.0.1:8000' + currentPlant.photo}/>
+                <img alt='...'className='current_plant_photo edit' src={'http://127.0.0.1:8000' + currentPlant.photo}/>
             </div> 
             }
             <form onSubmit={checkForm} className='side_panel_form'>
@@ -183,7 +183,7 @@ export default function AddPlant({currentPlant, showPanel, reload, form, setForm
                     <option value='sun-part_shade'>Indirect sunlight</option>
                     <option value='full_sun'>Full sunlight</option>
                 </select>
-                <label className='photo_input_label'for='photo_input'>
+                <label className='photo_input_label'htmlFor='photo_input'>
                     <input id='photo_input' type='file' onChange={handleChange} className='form_input' autoComplete='off' name='photo'></input>
                     Select photo
                 </label>

@@ -6,7 +6,6 @@ import AddPlant from "./AddPlant";
 export default function Main() {
     let [searching,setSearching] = React.useState(false)
     let [currentPlant, setCurrentPlant] = React.useState({})
-    const [addingRoom, setAddingRoom] = React.useState(false)
     const [seed,setSeed] = React.useState(true)
     const [form,setForm] = React.useState({
         name:'',
@@ -69,10 +68,7 @@ export default function Main() {
             reload()
         })
     }
-    function addRoom() {
-        console.log('adding room')
-        setAddingRoom(!addingRoom)
-    }
+    
     return (
         <div onClick = {searching ? search : undefined} className='main_container'>
             <div className='water_animation' />
@@ -80,16 +76,13 @@ export default function Main() {
                 sidePanel = {sidePanel} 
                 searching = {searching} 
                 setSearch = {search}
-                waterAllPlants = {() => waterAllPlants()}
-                addRoom = {() => addRoom()}/>
+                waterAllPlants = {() => waterAllPlants()}/>
             <div className='content_container'>
                 <Rooms 
                     reload={() => reload()}
                     seed={seed}
-                    addingRoom={addingRoom}
                     sidePanel={sidePanel}
                     setForm={setForm}
-                    setAddingRoom={setAddingRoom}
                     />
 
                 <AddPlant 
