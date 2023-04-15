@@ -4,7 +4,7 @@ export default function Search({sidePanel, searching, setSearch,waterAllPlants, 
     // States:
     const [plants,setPlants] = React.useState([])
     const [filtered_plants, setFilteredPlants] = React.useState([])
-    const [loading,setLoading] = React.useState(true)
+    const [loading,setLoading] = React.useState(false)
     const [lastQuery, setLastQuery] = React.useState('')
 
     function filterPlants(query) {
