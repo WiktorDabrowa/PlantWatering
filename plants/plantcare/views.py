@@ -16,9 +16,22 @@ def requestData(request):
     token = apikey.token
     request_data = json.loads(request.data['json'])
     query = request_data['data']
-    r = requests.get(f'https://perenual.com/api/species-list?key={token}&q={query}')
-    print(r)
-    return Response(r.json())
+    current_page = 1
+    last_page = 2
+    data = []
+    while current_page != last_page+1 :
+        r = requests.get(f'https://perenual.com/api/species-list?key={token}&page={current_page}&q={query}')
+        if current_page == 1:
+            final_response = r.json()
+            print(final_response)
+            data.extend(final_response['data'])
+            last_page = int(final_response['last_page'])
+        else:
+            response_object = r.json()
+            data.extend(response_object['data'])
+        current_page += 1
+    final_response['data'] = data
+    return Response(final_response)
     
     
 @api_view(['GET','POST','PUT'])

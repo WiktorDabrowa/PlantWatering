@@ -4,49 +4,62 @@ export default function Search({sidePanel, searching, setSearch,waterAllPlants, 
     // States:
     const [plants,setPlants] = React.useState([])
     const [filtered_plants, setFilteredPlants] = React.useState([])
-    
-    // Search outside database:
+    const [loading,setLoading] = React.useState(true)
+    const [lastQuery, setLastQuery] = React.useState('')
+
+    function filterPlants(query) {
+        console.log(query)
+        const contains_query = (element) => element.toLowerCase().includes(query)
+        setFilteredPlants(plants.filter((obj) => {
+            let response = false
+            if (obj.common_name.toLowerCase().includes(query)) {
+                response = true
+            } else if (obj.scientific_name.some(contains_query)) {
+                response = true
+            } else if (obj.other_name !== null) {
+                if (obj.other_name.some(contains_query)) {
+                    response = true
+                }
+            }
+            return response
+        }))
+    }
     function displayAddingRoom(){
         document.querySelector('.new_room').classList.toggle('not_visible')
     }
     function search(event){
+        const query = event.target.value
         // Starts search if query is longer than 3 characters
-        if (event.target.value.length < 3) {
-            // Do nothing
+        if (query.length < 3 && query.length > 0) {
+            setPlants([])
+            setFilteredPlants([])
         }
-        else if ( event.target.value.length === 3) {
-            // Freeze until response???
-            console.log(event.target.value)
-            // Send request to server and save data
-            let data = new FormData()
-            data.append('json', JSON.stringify({data: event.target.value}))
-            fetch('http://127.0.0.1:8000/external_api',{
-                method: 'POST',
-                body: data,
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data.data)
-                setPlants(data.data)
-            })
+        else if ( query.length === 3) {
+            if (query === lastQuery) {
+                // if query wasn`t changed, don`t send request
+                filterPlants(query)
+            } else {
+                // Send request to server and save data
+                setLastQuery(query)
+                setPlants([])
+                let data = new FormData()
+                data.append('json', JSON.stringify({data: query}))
+                setLoading(true)
+                fetch('http://127.0.0.1:8000/external_api',{
+                    method: 'POST',
+                    body: data,
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                    setLoading(false)
+                    setPlants(data.data)
+                    filterPlants(query)
+                })
+            }
         } else {
-            let query = event.target.value.toLowerCase()
-            const contains_query = (element) => element.toLowerCase().includes(query)
-            setFilteredPlants(plants.filter((obj) => {
-                let response = false
-                if (obj.common_name.toLowerCase().includes(query)) {
-                    response = true
-                } else if (obj.scientific_name.some(contains_query)) {
-                    response = true
-                } else if (obj.other_name !== null) {
-                    if (obj.other_name.some(contains_query)) {
-                        response = true
-                    }
-                }
-                return response
-            })
-            ) 
-            
+            console.log('here2')
+            filterPlants(query)
         }
     }
     
@@ -112,6 +125,7 @@ export default function Search({sidePanel, searching, setSearch,waterAllPlants, 
                             CREATE A NEW PLANT
                         </div>
                     </div>
+                    { loading && <div className='plant_autofill loading'>Loading</div>}
                     {items}
                 </div>    
             }

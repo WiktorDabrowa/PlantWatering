@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8rkpgu-7+@gbu!msuu#%x1_!=8gq)((@sqbw7ht&t$0##%t8lz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -54,8 +54,14 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware'
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
+    'http://localhost:8000',
+    'http://192.168.100.4:8000',
+    'http://127.0.0.1:8000'
 ]
+CORS_ORIGIN_ALLOW_ALL = True
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 
 ROOT_URLCONF = 'plants.urls'
 

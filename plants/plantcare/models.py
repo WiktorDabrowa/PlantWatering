@@ -17,7 +17,6 @@ class Plant(models.Model):
     localization = models.ForeignKey(Room, on_delete=models.PROTECT)
     sunlight = models.CharField(max_length=30, choices=sunlight_choices)
     water_how_often = models.IntegerField()
-    # auto_now will update this field every time object is saved
     last_watering = models.DateField(auto_now=True)
     photo = models.ImageField(upload_to='photos/')
     
