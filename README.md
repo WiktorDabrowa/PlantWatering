@@ -6,6 +6,4 @@ Simple web app to track watering of house plants
 
 - Django REST backend
 - React frontend
-- learn more about date objects in python and JS
-- Backend - send e-mail notifications
-- storing images in db
+- storing images
